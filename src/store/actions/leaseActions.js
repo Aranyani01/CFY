@@ -6,8 +6,8 @@ export const getLeaseOffersAction = () => {
     getAllLeaseOffers().then( leaseOffers => {
         // Change all addresses to lowercase
         const updatedOffers = leaseOffers.map( (leaseOffer) => {
-            leaseOffer.lender = leaseOffer.lender.toLowerCase();
-            leaseOffer.borrower = leaseOffer.borrower.toLowerCase();
+            leaseOffer.lender = leaseOffer.lessor.toLowerCase();
+            leaseOffer.borrower = leaseOffer.lessee.toLowerCase();
             leaseOffer.smartContractAddressOfNFT = leaseOffer.smartContractAddressOfNFT.toLowerCase();
             return leaseOffer;
           }

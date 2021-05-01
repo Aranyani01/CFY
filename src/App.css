@@ -15,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #228B22;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,9 +25,27 @@
   color: white;
 }
 
+.rounded-corner{
+    border-radius:20px;
+}
+
+.dent{
+  indent:50px;
+}
+
+.grad{
+  background-image: linear-gradient(yellow, red, blue)
+}
+
+.grad2{
+  background-image: linear-gradient(pink, turquoise)
+}
+
 .App-link {
   color: #61dafb;
 }
+
+.
 
 @keyframes App-logo-spin {
   from {

@@ -3,7 +3,7 @@ import { ToastMessage } from "rimble-ui";
 export const processingToast = (hash) => {
   window.toastProvider.addMessage("Transaction started...", {
     secondaryMessage: "Check progress on Etherscan",
-    actionHref: "https://rinkeby.etherscan.io/tx/" + hash,
+    actionHref: "https://mainnet.etherscan.io/tx/" + hash,
     actionText: "Check",
     variant: "processing"
   })

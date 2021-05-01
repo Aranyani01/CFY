@@ -3,9 +3,14 @@ import { connect } from 'react-redux'
 import { Button, Blockie, EthAddress } from "rimble-ui";
 import M from "materialize-css";
 
-import { approveNFT, lendNFT } from '../../../../services/web3/leaseNFTContract'
+import { approveNFT, leaseNFT } from '../../../../services/web3/leaseNFTContract'
 
 class NewLeaseOfferCard extends Component {
+
+  componentDidMount() {
+    var elems = document.querySelectorAll('input[type=range]');
+    var instances = M.Modal.init(elems);
+  }
 
 
   // State will get be filled with changes to input components
@@ -28,9 +33,9 @@ class NewLeaseOfferCard extends Component {
     );
   }
 
-  lendNFTButton = (e) => {
+  leaseNFTButton = (e) => {
     e.preventDefault();
-    lendNFT(
+    leaseNFT(
       this.props.userAddress,
       this.props.nft.asset_contract.address,
       this.props.nft.token_id,
@@ -85,7 +90,7 @@ class NewLeaseOfferCard extends Component {
               <button className="btn waves-effect waves-light indigo lighten-1 button-offer right" onClick={ this.approveNFT }><i class="material-icons left">looks_one</i> Approve Transfer</button>
           </div>
           <div className="row">
-              <button className="btn waves-effect waves-light indigo lighten-1 button-offer right" onClick={ this.lendNFTButton }><i class="material-icons left">looks_two</i> Create Offer</button>
+              <button className="btn waves-effect waves-light indigo lighten-1 button-offer right" onClick={ this.leaseNFTButton }><i class="material-icons left">looks_two</i> Create Offer</button>
           </div>
         </div>
       </div>

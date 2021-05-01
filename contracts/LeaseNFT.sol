@@ -2,10 +2,10 @@
 
 pragma solidity >=0.6.0 <0.7.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721Receiver.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Pausable.sol";
-import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract LeaseNFT is IERC721Receiver, Pausable {
 
@@ -14,6 +14,9 @@ contract LeaseNFT is IERC721Receiver, Pausable {
     using SafeMath for uint;
 
     enum Status { PENDING, ACTIVE, CANCELLED, ENDED }
+
+    address payable public constant CFY_VAULT = 0xA66748Aa582a81fACFA9De73469eF217Bf839f4E;
+
 
     struct LeaseOffer {
         uint leaseID;
@@ -73,7 +76,7 @@ contract LeaseNFT is IERC721Receiver, Pausable {
                                 uint collateralAmount,
                                 uint leasePrice,
                                 uint leasePeriod) public whenNotPaused {
-        require(leasePeriod < 4 weeks, "Lease for a maximum of 4 weeks.");
+        // require(leasePeriod < 4 weeks, "Lease for a maximum of 4 weeks.");
 
         IERC721 currentNFT = IERC721(smartContractAddressOfNFT);
         require(currentNFT.getApproved(tokenIdNFT) == address(this),
@@ -107,8 +110,11 @@ contract LeaseNFT is IERC721Receiver, Pausable {
         allLeaseOffers[leaseID].status = Status.ACTIVE;
         allLeaseOffers[leaseID].endLeaseTimeStamp = SafeMath.add(now, allLeaseOffers[leaseID].leasePeriod);
 
-        // Send lease price to lessor
-        allLeaseOffers[leaseID].lessor.transfer(allLeaseOffers[leaseID].leasePrice);
+        // Send lease price to lessor, 2.5% fee to cfy vault
+        uint leasePrice = allLeaseOffers[leaseID].leasePrice;
+        uint cfySHARE = leasePrice.mul(25).div(1000);
+        CFY_VAULT.transfer(cfySHARE);
+        allLeaseOffers[leaseID].lessor.transfer(leasePrice - cfySHARE);
 
         // Send NFT to lessee
         IERC721 currentNFT = IERC721(allLeaseOffers[leaseID].smartContractAddressOfNFT);

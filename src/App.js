@@ -22,6 +22,22 @@ import { LENDING_CONTRACT_ADDRESS } from "./assets/consts/requestsConsts"
 import { LEASING_CONTRACT_ADDRESS } from './assets/consts/offersConsts'
 import contractInterface from './contractsInterfaces/LoansNFT.json'
 import Web3 from 'web3'
+import { Magic } from 'magic-sdk'
+
+const BSCOptions = {
+  /* Smart Chain Testnet RPC URL */
+  rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+  chainId: 97, // Smart Chain Testnet Chain ID
+};
+
+const magic = new Magic('pk_test_058AAE9FA7BEE23B', {
+  network: BSCOptions,
+});
+/* Initialize Binance Smart Chain Web3 provider */
+const web3 = new Web3(magic.rpcProvider)
+
+// const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+
 
 class App extends Component {
 

@@ -5,24 +5,24 @@ const HomeCard = () => {
   return (
     <div className="row">
       <div className="col s12 m6 offset-m3">
-        <div className="card indigo lighten-1 center-align">
+        <div className="card grad2 lighten-1 center-align rounded-corner">
           <div className="card-content white-text">
             <span className="card-title white-text">Get Started</span>
             <br/>
             <p>
-              New users are encouraged to check the Docs
-              to take advantage of all the features and leverage their NFTs
+              CFY.finance is a DeFi app offering NFT-collatralised loans and NFT rental.
+              Check out Docs for more info.
             </p>
             <br/>
           </div>
           <div className="card-action">
-            <NavLink to='/' className="amber-text text-lighten-2">Docs</NavLink>
+            <NavLink to='/' className="indigo-text text-lighten-2">Docs</NavLink>
           </div>
           <div className="card-action">
-            <NavLink to='/newlease' className="amber-text text-lighten-2">Create Lease Offer</NavLink>
+            <NavLink to='/newlease' className="indigo-text text-lighten-2">Create Lease Offer</NavLink>
           </div>
           <div className="card-action">
-            <NavLink to='/newloan' className="amber-text text-lighten-2">Create Loan Request</NavLink>
+            <NavLink to='/newloan' className="indigo-text text-lighten-2">Create Loan Request</NavLink>
           </div>
         </div>
       </div>

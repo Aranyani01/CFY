@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import contractInterface from '../../contractsInterfaces/LeaseNFT.json'
+import contractInterface from '../../contractsInterfaces/LendNFT.json'
 import erc721ContractInterface from '../../contractsInterfaces/erc721.json'
 import { LEASING_CONTRACT_ADDRESS, mainnet_NETWORK_VERSION } from "../../assets/consts/offersConsts"
 import { processingToast, successToast, failedToast } from './toasts.js'
@@ -7,6 +7,12 @@ import { processingToast, successToast, failedToast } from './toasts.js'
 export const getWeb3Account = async () => {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
+    web3.eth.net.getId().then( id => {
+        if (id !== mainnet_NETWORK_VERSION) {
+          alert("Please switch to mainnet test network to use this app!");
+        }
+      }
+    )
     return window.ethereum.enable().then( accounts => accounts[0].toLowerCase() );
   }
   alert("Install an Ethereum-compatible browser or extension running on mainnet test network to use this app!");
@@ -17,10 +23,10 @@ export const getAllLeaseOffers = async (address) => {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     const crt = new web3.eth.Contract(contractInterface, LEASING_CONTRACT_ADDRESS, { from: address });
-    const leaseOffersNumber = parseInt(await crt.methods.totalLeaseOffers().call())
+    const leaseOffersNumber = parseInt(await crt.methods.totalLendingOffers().call())
     return Promise.all(
       [...Array(leaseOffersNumber).keys()].map(
-        id => crt.methods.allLeaseOffers(id).call()
+        id => crt.methods.allLendingOffers(id).call()
       )
     )
   }
@@ -49,20 +55,20 @@ export const approveNFT = async (erc721ContractAddress, userAddress, tokenIdNFT)
   });
 }
 
-export const leaseNFT = async (userAddress, smartContractAddressOfNFT, token_id,
-                        leasePeriod, collateralAmount, leasePrice) => {
+export const lendNFT = async (userAddress, smartContractAddressOfNFT, token_id,
+                        lendingPeriod, collateralAmount, lendingPrice) => {
   const web3 = new Web3(window.ethereum);
   const crt = new web3.eth.Contract(contractInterface, LEASING_CONTRACT_ADDRESS, {from: userAddress});
 
   const ethCollateralAmount = web3.utils.toWei(collateralAmount);
-  const ethleasePrice = web3.utils.toWei(leasePrice);
+  const ethLendingPrice = web3.utils.toWei(lendingPrice);
 
-  crt.methods.createLeaseOffer(
+  crt.methods.createLendingOffer(
     smartContractAddressOfNFT,
     token_id,
     ethCollateralAmount,
-    ethleasePrice,
-    leasePeriod * 86400
+    ethLendingPrice,
+    lendingPeriod * 86400
   ).send().on('transactionHash', (hash) => {
     processingToast(hash);
   }).on('receipt', (receipt) => {
@@ -72,11 +78,11 @@ export const leaseNFT = async (userAddress, smartContractAddressOfNFT, token_id,
   });
 }
 
-export const cancelOffer = async (leaseID, userAddress) => {
+export const cancelOffer = async (lendingID, userAddress) => {
   const web3 = new Web3(window.ethereum);
   const crt = new web3.eth.Contract(contractInterface, LEASING_CONTRACT_ADDRESS, {from: userAddress});
 
-  crt.methods.cancelLeaseOffer(leaseID).send().on('transactionHash', (hash) => {
+  crt.methods.cancelLendingOffer(lendingID).send().on('transactionHash', (hash) => {
     processingToast(hash);
   }).on('receipt', (receipt) => {
     successToast("Offer has been cancelled!");
@@ -85,11 +91,11 @@ export const cancelOffer = async (leaseID, userAddress) => {
   });
 }
 
-export const endleaseOffer = async (leaseID, userAddress) => {
+export const endLendingOffer = async (lendingID, userAddress) => {
   const web3 = new Web3(window.ethereum);
   const crt = new web3.eth.Contract(contractInterface, LEASING_CONTRACT_ADDRESS, {from: userAddress});
 
-  crt.methods.endLeaseOffer(leaseID).send().on('transactionHash', (hash) => {
+  crt.methods.endLendingOffer(lendingID).send().on('transactionHash', (hash) => {
     processingToast(hash);
   }).on('receipt', (receipt) => {
     successToast("Offer has ended!");
@@ -98,16 +104,16 @@ export const endleaseOffer = async (leaseID, userAddress) => {
   });
 }
 
-export const borrowNFT = async (userAddress, leaseID, collateralAmount, leasePrice) => {
+export const borrowNFT = async (userAddress, lendingID, collateralAmount, lendingPrice) => {
   const web3 = new Web3(window.ethereum);
   const crt = new web3.eth.Contract(contractInterface, LEASING_CONTRACT_ADDRESS, {from: userAddress});
 
   const colAm = parseFloat(web3.utils.fromWei(collateralAmount, 'ether'));
-  const lenPr = parseFloat(web3.utils.fromWei(leasePrice, 'ether'));
+  const lenPr = parseFloat(web3.utils.fromWei(lendingPrice, 'ether'));
   const sumString = (colAm + lenPr).toString();
   const amountToBorrowETH = web3.utils.toWei(sumString);
 
-  crt.methods.acceptLeaseOffer(leaseID).send({value: amountToBorrowETH}).on('transactionHash', (hash) => {
+  crt.methods.acceptLendingOffer(lendingID).send({value: amountToBorrowETH}).on('transactionHash', (hash) => {
     processingToast(hash);
   }).on('receipt', (receipt) => {
     successToast("Offer is now active!");

@@ -2,10 +2,10 @@
 
 pragma solidity >=0.6.0 <0.7.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721Receiver.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Pausable.sol";
-import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract LoansNFT is IERC721Receiver, Pausable {
 
@@ -14,6 +14,8 @@ contract LoansNFT is IERC721Receiver, Pausable {
     using SafeMath for uint;
 
     enum Status { PENDING, ACTIVE, CANCELLED, ENDED, DEFAULTED }
+
+    address payable public constant CFY_VAULT = 0xA66748Aa582a81fACFA9De73469eF217Bf839f4E;
 
     struct LoanRequest {
         uint loanID;
@@ -74,9 +76,9 @@ contract LoansNFT is IERC721Receiver, Pausable {
                                 uint interestAmount,
                                 uint singlePeriodTime,
                                 uint maximumInterestPeriods) public whenNotPaused {
-        require(singlePeriodTime < 31 days, "A single period can have a maximum of one month.");
-        require(interestAmount < loanAmount, "Interest must be lower than the principal of the loan.");
-        require(maximumInterestPeriods < 12, "Maximum interest periods are 12.");
+        require(singlePeriodTime <= 31 days, "A single period can have a maximum of one month.");
+        require(interestAmount < 2*loanAmount, "Interest must be lower than 2 * principal of the loan.");
+        require(maximumInterestPeriods <= 12, "Maximum interest periods are 12.");
         require(maximumInterestPeriods > 0, "Maximum interest period cannot be 0.");
 
         IERC721 currentNFT = IERC721(smartContractAddressOfNFT);
@@ -114,9 +116,12 @@ contract LoansNFT is IERC721Receiver, Pausable {
         allLoanRequests[loanID].status = Status.ACTIVE;
         allLoanRequests[loanID].endLoanTimeStamp = SafeMath.add(now, allLoanRequests[loanID].singlePeriodTime);
 
-        // Send sumForLoan to borrower
+        // Send sumForLoan to borrower, minus 2.5% to CFY token holders
         // NFT is kept by the loans smart contract
-        allLoanRequests[loanID].borrower.transfer(sumForLoan);
+
+        uint cfySHARE = sumForLoan.mul(25).div(1000);
+        CFY_VAULT.transfer(cfySHARE);
+        allLoanRequests[loanID].borrower.transfer(sumForLoan - cfySHARE);
         emit LoansUpdated();
     }
 
