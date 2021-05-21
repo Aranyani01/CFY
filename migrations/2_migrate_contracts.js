@@ -4,6 +4,8 @@ const ForwardContractNFT = artifacts.require("./ForwardContractNFT.sol");
 
 const LeaseNFT = artifacts.require("./LeaseNFT.sol");
 const LoanNFT = artifacts.require("./LoansNFT.sol");
+//const ForwardContractNFT = artifacts.require("./ForwardContractNFT.sol");
+
 
 
 module.exports = async function(deployer) {
@@ -23,6 +25,7 @@ module.exports = async function(deployer) {
   LeaseNFT.new.estimateGas()
   await deployer.deploy(LeaseNFT);
   await deployer.deploy(LoanNFT);
+  await deployer.deploy(ForwardContractNFT);
 
   // advancedTokenVote1202 = await AdvancedTokenVote1202.deployed();
   // await advancedTokenVote1202.createIssue(BasicErc20Token.address, [1, 2, 3], devAccounts, 'Issue 0: should we issue more tokens?');

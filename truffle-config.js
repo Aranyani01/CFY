@@ -3,9 +3,9 @@ const mnemonic = "floor mixed narrow glide legend strong doctor bench strong kin
 
 module.exports = {
   networks: {
-    mainnet: {
+    rinkeby: {
       provider: function() {
-        return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/6ba6f1f72b954dc894e9d117fa37e013")
+        return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/6ba6f1f72b954dc894e9d117fa37e013")
       },
       network_id: 4
     },
@@ -30,13 +30,24 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    matic: {
+    matictest: {
       provider: () => new HDWalletProvider(mnemonic, `https://rpc-mumbai.matic.today`),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true
+      skipDryRun: true,
+      from: '0xEF5dc33A53DD2ED3F670B53F07cEc5ADD4D80504'
+
     },
+    maticmain: {
+      provider: () => new HDWalletProvider(mnemonic, `https://rpc-mainnet.matic.network`),
+      network_id: 137,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      symbol: 'MATIC',
+      from: '0xEF5dc33A53DD2ED3F670B53F07cEc5ADD4D80504'
+    }
   },
   compilers:{
   solc: {

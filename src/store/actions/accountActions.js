@@ -12,7 +12,7 @@ export const getAccountAddressAction = () => {
 export const getAccountAssetAction = (address) => {
   return (dispatch, getState) => {
     getAssetsOpensea(address).then(response => {
-        dispatch({ type: 'ADD_ACCOUNT_ASSETS', accountAssets: response.data.assets })
+        dispatch({ type: 'ADD_ACCOUNT_ASSETS', accountAssets: response.data.results })
       }
     );
   }

@@ -15,6 +15,9 @@ contract LeaseNFT is IERC721Receiver, Pausable {
 
     enum Status { PENDING, ACTIVE, CANCELLED, ENDED }
 
+    address payable public constant CFY_VAULT = 0x7Cf5c58c071A94972D26404d31901696109700e1;
+
+
     struct LeaseOffer {
         uint leaseID;
         address payable lessor; // Owner of asset
@@ -73,7 +76,7 @@ contract LeaseNFT is IERC721Receiver, Pausable {
                                 uint collateralAmount,
                                 uint leasePrice,
                                 uint leasePeriod) public whenNotPaused {
-        require(leasePeriod < 4 weeks, "Lease for a maximum of 4 weeks.");
+        // require(leasePeriod < 4 weeks, "Lease for a maximum of 4 weeks.");
 
         IERC721 currentNFT = IERC721(smartContractAddressOfNFT);
         require(currentNFT.getApproved(tokenIdNFT) == address(this),
@@ -107,8 +110,11 @@ contract LeaseNFT is IERC721Receiver, Pausable {
         allLeaseOffers[leaseID].status = Status.ACTIVE;
         allLeaseOffers[leaseID].endLeaseTimeStamp = SafeMath.add(now, allLeaseOffers[leaseID].leasePeriod);
 
-        // Send lease price to lessor
-        allLeaseOffers[leaseID].lessor.transfer(allLeaseOffers[leaseID].leasePrice);
+        // Send lease price to lessor, 2.5% fee to cfy vault
+        uint leasePrice = allLeaseOffers[leaseID].leasePrice;
+        uint cfySHARE = leasePrice.mul(25).div(1000);
+        CFY_VAULT.transfer(cfySHARE);
+        allLeaseOffers[leaseID].lessor.transfer(leasePrice - cfySHARE);
 
         // Send NFT to lessee
         IERC721 currentNFT = IERC721(allLeaseOffers[leaseID].smartContractAddressOfNFT);

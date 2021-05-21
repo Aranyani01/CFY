@@ -24,18 +24,28 @@ import contractInterface from './contractsInterfaces/LoansNFT.json'
 import Web3 from 'web3'
 import { Magic } from 'magic-sdk'
 
-const BSCOptions = {
+
+
+const PolygonOptions = {
   /* Smart Chain Testnet RPC URL */
-  rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-  chainId: 97, // Smart Chain Testnet Chain ID
+  rpcUrl: 'https://rpc-mainnet.matic.network',
+  chainId: 137, // Smart Chain Testnet Chain ID
 };
 
 const magic = new Magic('pk_test_058AAE9FA7BEE23B', {
-  network: BSCOptions,
+  network: PolygonOptions,
 });
-/* Initialize Binance Smart Chain Web3 provider */
-const web3 = new Web3(magic.rpcProvider)
+/* Initialize Matic Smart Chain Web3 provider */
+const web3 = new Web3('https://rpc-mainnet.matic.network')
+// web3.personal.sign()
 
+fetch("https://nft-marketplace.api.matic.network/api/v1/users/login", {
+  "referrer": "https://matic.opensea.io/",
+  "referrerPolicy": "origin",
+  "body": "{\"address\":\"0xA66748Aa582a81fACFA9De73469eF217Bf839f4E\",\"signature\":\"0x0003125589cff31b19a8a2e9eddd427760a11f8b908cd4a694486193a6bfa0651fb3fdfda2e02cd6b136d734fa7288611b1745902698b39a4253e06be6cfa8061b\"}",
+  "method": "POST",
+  "mode": "cors"
+});
 // const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
 
 
