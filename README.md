@@ -1,3 +1,55 @@
+## CFY.FINANCE
+
+NFT-Collateralised Loans on Polygon
+
+![alt text](https://raw.githubusercontent.com/Aranyani01/CFY/main/public/logo512.png)
+
+Beta is now Live on Matic Mainnet! Contract Addresses:
+
+- LeaseNFT.sol : 0xbe7Ba64cCAab7a4aaB4D32e4070Bf85D057D2B5c
+- LoanNFT.sol : 0x48CddE6c5af7D19BF1A436159b54AD42d753141C
+
+## Webapp (Frontend) live on: http://cfy.finance:3000
+
+*Summary:*
+
+CFY.Finance is a Decentralised Finance (DeFi) protocol for NFT-collateralised loans, and NFT lending. NFTs is a fast growing market that is currently plagued with extreme lack of liquidity. Moreover, unlike ERC20 tokens, holders of ERC721 NFT tokens do not have any way to earn passive income/access liquidity from their holdings. CFY.Finance changes that by allowing peer-to-peer NFT-collateralised loans using any ERC721 NFT.
+
+Contracts:
+[Note: LOAN NFT functionality is fully functional; Lease NFT is still a work in progress]
+
+LoanNFT.sol allows you to:
+
+1. Lock up any ERC721 token as collateral for a loan request
+2. Setup loan request parameters, including loan amount, interest amount, and maximum interest periods
+3. After loan is funded, you can extend the loan period upto the maximum interest periods
+4. Upon repayment of the loan with interest within the time specified, the LoansNFT.sol contract releases your NFT back to you
+5. If you fail to repay the loan within the promised time, the NFT collateral is transferred to the creditor
+
+In this way, we allow a peer to peer, trustless liquidity protocol where investors can gain interest on their funds while their principal is secured by valuable NFTs. Meanwhile, NFT hodlers can access liquidity as needed without having to sell/risk their precious NFTs. The scalability of the Polygon chain makes it ideal for running complicated smart contracts like CFY.finance cheaply. *CFY.FINANCE* is also the first trustless NFT application, and first NFT-collateralised loan dApp on Polygon. We hope to provide the DeFi infrastructre for NFTs to grow and thrive on the Polygon Chain.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
