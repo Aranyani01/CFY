@@ -1,12 +1,13 @@
- ***CFY.FINANCE***
+## CFY.FINANCE
+ 
 NFT-Collateralised Loans on Polygon
 
 Beta is now Live on Matic Mainnet! Contract Addresses:
 
-LeaseNFT.sol : 0xbe7Ba64cCAab7a4aaB4D32e4070Bf85D057D2B5c
-LoanNFT.sol : 0x48CddE6c5af7D19BF1A436159b54AD42d753141C
+## LeaseNFT.sol : 0xbe7Ba64cCAab7a4aaB4D32e4070Bf85D057D2B5c
+## LoanNFT.sol : 0x48CddE6c5af7D19BF1A436159b54AD42d753141C
 
-Webapp (Frontend) live on: http://cfy.finance:3000
+## Webapp (Frontend) live on: http://cfy.finance:3000
 
 *Summary:*
 
