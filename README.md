@@ -2,7 +2,7 @@
  
 NFT-Collateralised Loans on Polygon
 
-![alt text]https://raw.githubusercontent.com/Aranyani01/CFY/main/public/logo512.png
+![alt text](https://raw.githubusercontent.com/Aranyani01/CFY/main/public/logo512.png)
 
 Beta is now Live on Matic Mainnet! Contract Addresses:
 
