@@ -1,3 +1,39 @@
+ ***CFY.FINANCE***
+NFT-Collateralised Loans on Polygon
+
+Beta is now Live on Matic Mainnet! Contract Addresses:
+
+LeaseNFT.sol : 0xbe7Ba64cCAab7a4aaB4D32e4070Bf85D057D2B5c
+LoanNFT.sol : 0x48CddE6c5af7D19BF1A436159b54AD42d753141C
+
+Webapp (Frontend) live on: http://cfy.finance:3000
+
+*Summary:*
+
+CFY.Finance is a Decentralised Finance (DeFi) protocol for NFT-collateralised loans, and NFT lending. NFTs is a fast growing market that is currently plagued with extreme lack of liquidity. Moreover, unlike ERC20 tokens, holders of ERC721 NFT tokens do not have any way to earn passive income/access liquidity from their holdings. CFY.Finance changes that by allowing peer-to-peer NFT-collateralised loans using any ERC721 NFT. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
