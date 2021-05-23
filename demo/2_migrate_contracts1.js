@@ -1,7 +1,9 @@
 // const SimplestVote1202 = artifacts.require("./simple-version/SimplestVote1202.sol");
+const ForwardContractNFT = artifacts.require("./ForwardContractNFT.sol");
 // const TokenVote1202 = artifacts.require("./simple-version/TokenVote1202.sol");
 
-const CFYToken = artifacts.require("./CFYToken.sol");
+const LeaseNFT = artifacts.require("./LeaseNFT.sol");
+const LoanNFT = artifacts.require("./LoansNFT.sol");
 //const ForwardContractNFT = artifacts.require("./ForwardContractNFT.sol");
 
 
@@ -20,9 +22,10 @@ module.exports = async function(deployer) {
   // await deployer.deploy(TokenVote1202);
   // tokenVote1202 = await TokenVote1202.deployed();
   // await tokenVote1202.init(SampleToken.address, [1, 2, 3], devAccounts);
-  CFYToken.new.estimateGas()
-  await deployer.deploy(CFYToken);
-
+  LeaseNFT.new.estimateGas()
+  await deployer.deploy(LeaseNFT);
+  await deployer.deploy(LoanNFT);
+  await deployer.deploy(ForwardContractNFT);
 
   // advancedTokenVote1202 = await AdvancedTokenVote1202.deployed();
   // await advancedTokenVote1202.createIssue(BasicErc20Token.address, [1, 2, 3], devAccounts, 'Issue 0: should we issue more tokens?');
