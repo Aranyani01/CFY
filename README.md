@@ -28,6 +28,8 @@ LoanNFT.sol allows you to:
 
 In this way, we allow a peer to peer, trustless liquidity protocol where investors can gain interest on their funds while their principal is secured by valuable NFTs. Meanwhile, NFT hodlers can access liquidity as needed without having to sell/risk their precious NFTs. The scalability of the Polygon chain makes it ideal for running complicated smart contracts like CFY.finance cheaply. *CFY.FINANCE* is also the first trustless NFT application, and first NFT-collateralised loan dApp on Polygon. We hope to provide the DeFi infrastructre for NFTs to grow and thrive on the Polygon Chain.
 
+Video Walkthrough: https://youtu.be/xPK_FzsnIBI
+
 
 
 
