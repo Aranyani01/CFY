@@ -1,4 +1,6 @@
 ## CFY.FINANCE
+https://www.youtube.com/watch?v=xPK_FzsnIBI
+
  
 NFT-Collateralised Loans on Polygon
 
