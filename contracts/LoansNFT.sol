@@ -6,8 +6,11 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LoansNFT is IERC721Receiver, Pausable {
+
+contract LoansNFT is IERC721Receiver, Pausable, Ownable {
 
     event LoansUpdated();
 
@@ -15,7 +18,7 @@ contract LoansNFT is IERC721Receiver, Pausable {
 
     enum Status { PENDING, ACTIVE, CANCELLED, ENDED, DEFAULTED }
 
-    address payable public constant CFY_VAULT = 0x7Cf5c58c071A94972D26404d31901696109700e1;
+    address payable public constant CFY_VAULT = 0xFD7Ec510f6346a37bF6485EfAA7E66b499900f61;
 
     struct LoanRequest {
         uint loanID;
@@ -32,7 +35,9 @@ contract LoansNFT is IERC721Receiver, Pausable {
     }
 
     address public manager;
+    address public Cfytoken;
     uint public totalLoanRequests;
+    uint public totalRewards;
     mapping(uint => LoanRequest) public allLoanRequests;
 
     modifier isValidLoanID(uint loanID) {
@@ -54,6 +59,14 @@ contract LoansNFT is IERC721Receiver, Pausable {
     constructor() public {
         manager = msg.sender;
         totalLoanRequests = 0;
+        launchblock = block.timestamp
+    }
+
+    // CFY tokens issued as rewards for participating in lending protocol
+    // issued both to lenders (upon lending) and borrowers (upon repayment).
+    function mintReward(uint256 amount, address recipient) private internal {
+      Cfy = new ERC20(Cfytoken);
+      Cfy.mint(recipient, amount);
     }
 
     // Equivalent to 'bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))'
@@ -61,6 +74,33 @@ contract LoansNFT is IERC721Receiver, Pausable {
     function onERC721Received(address operator, address from, uint256 tokenId, bytes memory data) public override returns (bytes4) {
         return 0x150b7a02;
     }
+
+    function setCFYToken(address tokenaddress) public onlyOwner {
+       Cfytoken = tokenaddress;
+    }
+
+    // Reward period 1 - 0-7 days
+    // Reward period 2 - 7-21 days
+    // Reward period 3 - 21+ days
+    function calculateReward(uint256 amountTransacted) public returns (uint256){
+      timeElapsed = (block.timestamp - launchblock)/1 days;
+      if(timeElapsed <=7 && totalRewards <=100000){
+        uint256 reward = amountTransacted * 2
+      }
+      elif(timeElapsed <=21 && totalRewards <=250000){
+        uint256 reward = amountTransacted * 1
+      }
+      elif(timeElapsed >=21 && totalRewards <=500000){
+        uint256 reward = amountTransacted / 5
+      }
+      else {
+        uint256 reward = 0 * 1
+      }
+      totalRewards += reward;
+      return reward;
+    }
+
+
 
     function pauseLoans() public onlyManager {
         _pause();
@@ -123,6 +163,10 @@ contract LoansNFT is IERC721Receiver, Pausable {
         CFY_VAULT.transfer(cfySHARE);
         allLoanRequests[loanID].borrower.transfer(sumForLoan - cfySHARE);
         emit LoansUpdated();
+
+        // issue reward
+        uint256 reward = calculateReward(allLoanRequests[loanID].loanAmount);
+        mintReward(reward, allLoanRequests[loanID].lender);
     }
 
     function extendLoanRequest(uint loanID) payable public isValidLoanID(loanID) whenNotPaused {
@@ -151,6 +195,9 @@ contract LoansNFT is IERC721Receiver, Pausable {
             require(msg.value >= allLoanRequests[loanID].loanAmount, "The principal amount of the loan was not sent.");
             allLoanRequests[loanID].status = Status.ENDED;
             allLoanRequests[loanID].lender.transfer(allLoanRequests[loanID].loanAmount);
+            //calculate and mint rewards
+            uint256 reward = calculateReward(allLoanRequests[loanID].loanAmount);
+            mintReward(reward, allLoanRequests[loanID].borrower);
         } else {
             allLoanRequests[loanID].status = Status.DEFAULTED;
         }

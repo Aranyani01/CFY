@@ -1,21 +1,22 @@
 import Web3 from 'web3'
 import contractInterface from '../../contractsInterfaces/LendNFT.json'
 import erc721ContractInterface from '../../contractsInterfaces/erc721.json'
-import { LEASING_CONTRACT_ADDRESS, mainnet_NETWORK_VERSION } from "../../assets/consts/offersConsts"
+import { LEASING_CONTRACT_ADDRESS } from "../../assets/consts/offersConsts"
 import { processingToast, successToast, failedToast } from './toasts.js'
 
 export const getWeb3Account = async () => {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     web3.eth.net.getId().then( id => {
+        mainnet_NETWORK_VERSION = 137;
         if (id !== mainnet_NETWORK_VERSION) {
-          alert("Please switch to mainnet test network to use this app!");
+          alert("Please switch to Polygon mainnet test network to use this app!");
         }
       }
     )
     return window.ethereum.enable().then( accounts => accounts[0].toLowerCase() );
   }
-  alert("Install an Ethereum-compatible browser or extension running on mainnet test network to use this app!");
+  alert("Install an Ethereum-compatible browser or extension running on Polygon Mainnet test network to use this app!");
   return 0;
 }
 
